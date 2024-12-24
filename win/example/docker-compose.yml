@@ -5,6 +5,6 @@ services:
       context: ..
       args:
         BASE_IMAGE: "mcr.microsoft.com/windows/servercore:ltsc2022"
-        RUNNER_VERSION: "2.292.0"
+        RUNNER_VERSION: "2.321.0"
     env_file:
       - ./example/.env
