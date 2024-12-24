@@ -4,8 +4,6 @@ services:
     build:
       context: ..
       args:
-        HTTP_PROXY: "http://127.0.0.1:10809"
-        HTTPS_PROXY: "http://127.0.0.1:10809"
         BASE_IMAGE: "mcr.microsoft.com/windows/servercore:ltsc2022"
         RUNNER_VERSION: "2.292.0"
     env_file:
