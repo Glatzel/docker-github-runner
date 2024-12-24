@@ -1,9 +1,11 @@
 services:
   runner:
-    image: pwd9000-github-runner-win:ltsc2022
+    image: glatzel-github-runner-win:ltsc2022
     build:
       context: ..
       args:
+        HTTP_PROXY: "http://127.0.0.1:10809"
+        HTTPS_PROXY: "http://127.0.0.1:10809"
         BASE_IMAGE: "mcr.microsoft.com/windows/servercore:ltsc2022"
         RUNNER_VERSION: "2.292.0"
     env_file:
