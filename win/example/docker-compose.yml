@@ -1,15 +1,10 @@
----
-version: '3.8'
-
 services:
   runner:
-    image: pwd9000-github-runner-win:latest
+    image: pwd9000-github-runner-win:ltsc2022
     build:
-      context: .
+      context: ..
       args:
+        BASE_IMAGE: "mcr.microsoft.com/windows/servercore:ltsc2022"
         RUNNER_VERSION: "2.292.0"
-    environment:
-      GH_TOKEN: ${GH_TOKEN}
-      GH_OWNER: ${GH_OWNER}
     env_file:
-      - .env
+      - ./example/.env
