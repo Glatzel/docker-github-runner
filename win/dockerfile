@@ -1,0 +1,42 @@
+# Base image
+# image version should lower than or equal to system version
+# reference
+# https://hub.docker.com/r/microsoft/windows
+# https://mcr.microsoft.com/en-us/artifact/mar/windows/servercore/insider/about
+# https://mcr.microsoft.com/en-us/artifact/mar/windows/servercore/tags
+# Win10 example
+# mcr.microsoft.com/windows/servercore/insider:10.0.19035.1
+# Win11 example
+# mcr.microsoft.com/windows/servercore/insider:10.0.26244.5000
+ARG BASE_IMAGE
+FROM $BASE_IMAGE
+LABEL BaseImage=${BASE_IMAGE}
+
+#input GitHub runner version argument
+ARG RUNNER_VERSION
+LABEL RunnerVersion=${RUNNER_VERSION}
+
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+
+#Set working directory
+WORKDIR /actions-runner
+
+#Install chocolatey
+ADD scripts/Install-Choco.ps1 .
+RUN .\Install-Choco.ps1 -Wait; \
+    Remove-Item .\Install-Choco.ps1 -Force
+
+#Install Choco packages
+RUN choco install -y \
+    git \
+    gh \
+    powershell-core
+
+#Download GitHub Runner based on RUNNER_VERSION argument (Can use: Docker build --build-arg RUNNER_VERSION=x.y.z)
+RUN Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$env:RUNNER_VERSION/actions-runner-win-x64-$env:RUNNER_VERSION.zip" -OutFile "actions-runner.zip"; \
+    Expand-Archive -Path ".\\actions-runner.zip" -DestinationPath '.'; \
+    Remove-Item ".\\actions-runner.zip" -Force
+
+#Add GitHub runner configuration startup script
+ADD scripts/start.ps1 .
+ENTRYPOINT ["pwsh.exe", ".\\start.ps1"]
