@@ -1,5 +1,5 @@
 #This script invokes GitHub-CLI (Already installed on container image)
-#To use this entrypoint script run: Docker run -e GH_TOKEN='myPatToken' -e GH_REPO='repoName' -d imageName 
+#To use this entrypoint script run: Docker run -e GH_TOKEN='myPatToken' -e GH_REPO='repoName' -d imageName
 Param (
     [Parameter(Mandatory = $false)]
     [string]$repo = $env:GH_REPO,
